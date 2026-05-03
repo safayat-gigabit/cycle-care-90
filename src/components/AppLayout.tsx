@@ -47,7 +47,7 @@ export function AppLayout() {
             return (
               <Link
                 key={to}
-                to={to}
+                to={to as never}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
                   active
@@ -97,7 +97,7 @@ export function AppLayout() {
           {nav.filter(n => !n.admin || role === "admin").map(({ to, label, icon: Icon }) => {
             const active = path === to;
             return (
-              <Link key={to} to={to} className={cn(
+              <Link key={to} to={to as never} className={cn(
                 "flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2 text-xs min-w-[68px]",
                 active ? "text-primary" : "text-muted-foreground"
               )}>
