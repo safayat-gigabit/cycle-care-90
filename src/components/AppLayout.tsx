@@ -7,7 +7,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const nav = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; admin?: boolean };
+const nav: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/cycles", label: "Billing Cycles", icon: CalendarRange, admin: true },
   { to: "/meals", label: "Meals", icon: UtensilsCrossed },
@@ -16,7 +17,7 @@ const nav = [
   { to: "/extra-costs", label: "Extra Costs", icon: Plus, admin: true },
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/users", label: "Users", icon: Users, admin: true },
-] as const;
+];
 
 export function AppLayout() {
   const { profile, role, signOut } = useAuth();
