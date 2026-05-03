@@ -1,11 +1,14 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
+import { AppLayout } from "@/components/AppLayout";
 
-export const Route = createFileRoute("/")({
-  component: Index,
+// Pathless layout route — wraps all "/app/*" children with AppLayout + auth gate.
+// We use a prefix "_app" for layout-only grouping; children use full paths.
+export const Route = createFileRoute("/_app")({
+  component: AuthedShell,
 });
 
-function Index() {
+function AuthedShell() {
   const { session, loading } = useAuth();
   if (loading) {
     return (
@@ -14,5 +17,6 @@ function Index() {
       </div>
     );
   }
-  return <Navigate to={session ? "/dashboard" : "/login"} />;
+  if (!session) return <Navigate to="/login" />;
+  return <AppLayout />;
 }

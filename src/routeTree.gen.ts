@@ -9,38 +9,193 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppUsersRouteImport } from './routes/_app.users'
+import { Route as AppReportsRouteImport } from './routes/_app.reports'
+import { Route as AppMealsRouteImport } from './routes/_app.meals'
+import { Route as AppExtraCostsRouteImport } from './routes/_app.extra-costs'
+import { Route as AppDepositsRouteImport } from './routes/_app.deposits'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppCyclesRouteImport } from './routes/_app.cycles'
+import { Route as AppBazarRouteImport } from './routes/_app.bazar'
 
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppUsersRoute = AppUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMealsRoute = AppMealsRouteImport.update({
+  id: '/meals',
+  path: '/meals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExtraCostsRoute = AppExtraCostsRouteImport.update({
+  id: '/extra-costs',
+  path: '/extra-costs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDepositsRoute = AppDepositsRouteImport.update({
+  id: '/deposits',
+  path: '/deposits',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCyclesRoute = AppCyclesRouteImport.update({
+  id: '/cycles',
+  path: '/cycles',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBazarRoute = AppBazarRouteImport.update({
+  id: '/bazar',
+  path: '/bazar',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/bazar': typeof AppBazarRoute
+  '/cycles': typeof AppCyclesRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/deposits': typeof AppDepositsRoute
+  '/extra-costs': typeof AppExtraCostsRoute
+  '/meals': typeof AppMealsRoute
+  '/reports': typeof AppReportsRoute
+  '/users': typeof AppUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/bazar': typeof AppBazarRoute
+  '/cycles': typeof AppCyclesRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/deposits': typeof AppDepositsRoute
+  '/extra-costs': typeof AppExtraCostsRoute
+  '/meals': typeof AppMealsRoute
+  '/reports': typeof AppReportsRoute
+  '/users': typeof AppUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/_app/bazar': typeof AppBazarRoute
+  '/_app/cycles': typeof AppCyclesRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/deposits': typeof AppDepositsRoute
+  '/_app/extra-costs': typeof AppExtraCostsRoute
+  '/_app/meals': typeof AppMealsRoute
+  '/_app/reports': typeof AppReportsRoute
+  '/_app/users': typeof AppUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/bazar'
+    | '/cycles'
+    | '/dashboard'
+    | '/deposits'
+    | '/extra-costs'
+    | '/meals'
+    | '/reports'
+    | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/bazar'
+    | '/cycles'
+    | '/dashboard'
+    | '/deposits'
+    | '/extra-costs'
+    | '/meals'
+    | '/reports'
+    | '/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/login'
+    | '/register'
+    | '/_app/bazar'
+    | '/_app/cycles'
+    | '/_app/dashboard'
+    | '/_app/deposits'
+    | '/_app/extra-costs'
+    | '/_app/meals'
+    | '/_app/reports'
+    | '/_app/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,21 +203,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/users': {
+      id: '/_app/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AppUsersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/reports': {
+      id: '/_app/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/meals': {
+      id: '/_app/meals'
+      path: '/meals'
+      fullPath: '/meals'
+      preLoaderRoute: typeof AppMealsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/extra-costs': {
+      id: '/_app/extra-costs'
+      path: '/extra-costs'
+      fullPath: '/extra-costs'
+      preLoaderRoute: typeof AppExtraCostsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/deposits': {
+      id: '/_app/deposits'
+      path: '/deposits'
+      fullPath: '/deposits'
+      preLoaderRoute: typeof AppDepositsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cycles': {
+      id: '/_app/cycles'
+      path: '/cycles'
+      fullPath: '/cycles'
+      preLoaderRoute: typeof AppCyclesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/bazar': {
+      id: '/_app/bazar'
+      path: '/bazar'
+      fullPath: '/bazar'
+      preLoaderRoute: typeof AppBazarRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppBazarRoute: typeof AppBazarRoute
+  AppCyclesRoute: typeof AppCyclesRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDepositsRoute: typeof AppDepositsRoute
+  AppExtraCostsRoute: typeof AppExtraCostsRoute
+  AppMealsRoute: typeof AppMealsRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppUsersRoute: typeof AppUsersRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppBazarRoute: AppBazarRoute,
+  AppCyclesRoute: AppCyclesRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppDepositsRoute: AppDepositsRoute,
+  AppExtraCostsRoute: AppExtraCostsRoute,
+  AppMealsRoute: AppMealsRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppUsersRoute: AppUsersRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
