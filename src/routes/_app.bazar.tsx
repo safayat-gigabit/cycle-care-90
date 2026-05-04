@@ -89,13 +89,15 @@ function BazarPage() {
                       <Label>Amount (৳)</Label>
                       <Input type="number" step="0.01" min="0" value={amount} onChange={e=>setAmount(e.target.value)} required />
                     </div>
-                    <div>
-                      <Label>Buyer</Label>
-                      <Select value={buyer} onValueChange={setBuyer}>
-                        <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                        <SelectContent>{profiles.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}</SelectContent>
-                      </Select>
-                    </div>
+                    {isAdmin ? (
+                      <div>
+                        <Label>Buyer</Label>
+                        <Select value={buyer} onValueChange={setBuyer}>
+                          <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                          <SelectContent>{profiles.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}</SelectContent>
+                        </Select>
+                      </div>
+                    ) : null}
                     <div>
                       <Label>Items (optional)</Label>
                       <Textarea value={items} onChange={e=>setItems(e.target.value)} placeholder="Rice, oil, vegetables…" />
