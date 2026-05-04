@@ -72,9 +72,9 @@ function BazarPage() {
         title="Bazar"
         description="Daily market expenses"
         actions={
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 items-center">
             <CycleSelector />
-            {isAdmin && selected && (
+            {selected && (
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-1" /> Add</Button></DialogTrigger>
                 <DialogContent>
