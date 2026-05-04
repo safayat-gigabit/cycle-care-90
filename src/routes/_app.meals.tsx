@@ -115,6 +115,9 @@ function MealsPage() {
     debounceRef.current[key] = setTimeout(() => persist(userId, date, raw), 500);
   };
 
+  // Only admins can edit meals
+  const canEdit = (_userId: string) => isAdmin;
+
   const totals = useMemo(() => {
     const t: Record<string, number> = {};
     users.forEach((u) => {
@@ -137,7 +140,7 @@ function MealsPage() {
         description={
           isAdmin
             ? "Daily meal grid for all members. Click a cell to edit — autosaves."
-            : "Your daily meal entries — autosaves on change."
+            : "Daily meal grid (read-only). Only admins can edit."
         }
         actions={<CycleSelector />}
       />
@@ -182,14 +185,17 @@ function MealsPage() {
                       </td>
                       {users.map((u) => {
                         const key = `${u.id}|${ds}`;
-                        const editable = isAdmin || u.id === user?.id;
+                        const editable = canEdit(u.id);
+                        const raw = values[key] ?? "";
+                        const numVal = Number(raw || 0);
+                        const hasMeal = numVal > 0;
                         return (
                           <td key={u.id} className="p-1 text-center">
                             <input
                               type="text"
                               inputMode="decimal"
                               disabled={!editable}
-                              value={values[key] ?? ""}
+                              value={raw}
                               placeholder="0"
                               onChange={(e) => onChange(u.id, ds, e.target.value)}
                               onBlur={(e) => {
@@ -202,10 +208,14 @@ function MealsPage() {
                                 persist(u.id, ds, e.target.value);
                               }}
                               className={cn(
-                                "w-16 h-8 rounded-md bg-transparent border border-input text-center tabular-nums",
+                                "w-14 sm:w-16 h-9 rounded-md border text-center tabular-nums font-medium transition-colors",
                                 "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
-                                "disabled:opacity-60 disabled:cursor-not-allowed",
-                                saving[key] && "border-primary",
+                                "disabled:cursor-not-allowed",
+                                hasMeal
+                                  ? "bg-primary/15 border-primary/40 text-primary"
+                                  : "bg-transparent border-input text-muted-foreground",
+                                !editable && "opacity-90",
+                                saving[key] && "ring-2 ring-primary/60",
                               )}
                             />
                           </td>
