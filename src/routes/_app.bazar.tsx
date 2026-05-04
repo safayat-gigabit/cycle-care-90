@@ -110,7 +110,50 @@ function BazarPage() {
           </div>
         }
       />
-      <Card className="overflow-hidden">
+      {/* Total summary */}
+      <div className="mb-3 flex items-center justify-between text-sm">
+        <span className="text-muted-foreground">{rows.length} entr{rows.length === 1 ? "y" : "ies"}</span>
+        <span className="font-semibold tabular-nums">
+          Total: ৳{rows.reduce((s, r) => s + Number(r.amount), 0).toFixed(2)}
+        </span>
+      </div>
+
+      {/* Mobile card list */}
+      <div className="space-y-2 sm:hidden">
+        {rows.length === 0 && (
+          <Card className="p-6 text-center text-muted-foreground text-sm">No bazar entries</Card>
+        )}
+        {rows.map(r => {
+          const canDelete = isAdmin || r.buyer_id === user?.id;
+          return (
+            <Card key={r.id} className="p-3">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{format(new Date(r.date), "MMM d, yyyy")}</span>
+                    <span>•</span>
+                    <span className="truncate">{r.buyer?.name ?? "—"}</span>
+                  </div>
+                  {r.item_list && (
+                    <p className="text-sm mt-1 text-foreground/90 line-clamp-2">{r.item_list}</p>
+                  )}
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-semibold tabular-nums text-primary">৳{Number(r.amount).toFixed(2)}</div>
+                  {canDelete && (
+                    <Button variant="ghost" size="icon" className="h-7 w-7 -mr-2" onClick={() => remove(r.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <Card className="overflow-hidden hidden sm:block">
         <table className="w-full text-sm">
           <thead className="bg-muted/40">
             <tr className="text-left">
@@ -123,17 +166,20 @@ function BazarPage() {
           </thead>
           <tbody>
             {rows.length === 0 && <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No bazar entries</td></tr>}
-            {rows.map(r => (
-              <tr key={r.id} className="border-t border-border">
-                <td className="px-4 py-3">{format(new Date(r.date), "MMM d, yyyy")}</td>
-                <td className="px-4 py-3">{r.buyer?.name ?? "—"}</td>
-                <td className="px-4 py-3 text-muted-foreground max-w-[260px] truncate">{r.item_list ?? "—"}</td>
-                <td className="px-4 py-3 font-medium tabular-nums text-right">৳{Number(r.amount).toFixed(2)}</td>
-                <td className="px-4 py-3 text-right">
-                  {isAdmin && <Button variant="ghost" size="icon" onClick={() => remove(r.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>}
-                </td>
-              </tr>
-            ))}
+            {rows.map(r => {
+              const canDelete = isAdmin || r.buyer_id === user?.id;
+              return (
+                <tr key={r.id} className="border-t border-border">
+                  <td className="px-4 py-3 whitespace-nowrap">{format(new Date(r.date), "MMM d, yyyy")}</td>
+                  <td className="px-4 py-3">{r.buyer?.name ?? "—"}</td>
+                  <td className="px-4 py-3 text-muted-foreground max-w-[260px] truncate">{r.item_list ?? "—"}</td>
+                  <td className="px-4 py-3 font-medium tabular-nums text-right">৳{Number(r.amount).toFixed(2)}</td>
+                  <td className="px-4 py-3 text-right">
+                    {canDelete && <Button variant="ghost" size="icon" onClick={() => remove(r.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </Card>
