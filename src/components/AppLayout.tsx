@@ -78,36 +78,40 @@ export function AppLayout() {
       </aside>
 
       {/* mobile top bar */}
-      <div className="md:hidden fixed top-0 inset-x-0 z-30 bg-sidebar border-b border-sidebar-border px-4 py-3 flex items-center justify-between">
+      <div className="md:hidden fixed top-0 inset-x-0 z-30 bg-sidebar/95 backdrop-blur border-b border-sidebar-border px-4 py-3 flex items-center justify-between pt-[max(0.75rem,env(safe-area-inset-top))]">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+          <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
             <ChefHat className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-semibold">Mess Manager</span>
+          <div className="leading-tight">
+            <div className="text-sm font-semibold">Mess Manager</div>
+            <div className="text-[10px] text-muted-foreground capitalize">{profile?.name} · {role}</div>
+          </div>
         </div>
         <Button size="icon" variant="ghost" onClick={handleSignOut}><LogOut className="h-4 w-4" /></Button>
       </div>
 
-      <main className="flex-1 md:ml-0 mt-14 md:mt-0 overflow-x-hidden">
-        <div className="p-4 md:p-8 max-w-7xl mx-auto">
+      <main className="flex-1 md:ml-0 mt-[60px] md:mt-0 overflow-x-hidden w-full">
+        <div className="p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
           <Outlet />
         </div>
         {/* mobile bottom nav */}
-        <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sidebar border-t border-sidebar-border flex overflow-x-auto">
-          {nav.filter(n => !n.admin || role === "admin").map(({ to, label, icon: Icon }) => {
-            const active = path === to;
-            return (
-              <Link key={to} to={to as never} className={cn(
-                "flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2 text-xs min-w-[68px]",
-                active ? "text-primary" : "text-muted-foreground"
-              )}>
-                <Icon className="h-4 w-4" />
-                <span className="truncate max-w-[60px]">{label}</span>
-              </Link>
-            );
-          })}
+        <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-sidebar/95 backdrop-blur border-t border-sidebar-border pb-[env(safe-area-inset-bottom)]">
+          <div className="flex overflow-x-auto no-scrollbar">
+            {nav.filter(n => !n.admin || role === "admin").map(({ to, label, icon: Icon }) => {
+              const active = path === to || path.startsWith(to + "/");
+              return (
+                <Link key={to} to={to as never} className={cn(
+                  "flex-1 min-w-[64px] flex flex-col items-center gap-0.5 px-2 py-2 text-[10px] transition-colors",
+                  active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                )}>
+                  <Icon className={cn("h-5 w-5", active && "scale-110 transition-transform")} />
+                  <span className="truncate max-w-[60px]">{label}</span>
+                </Link>
+              );
+            })}
+          </div>
         </nav>
-        <div className="md:hidden h-16" />
       </main>
     </div>
   );
